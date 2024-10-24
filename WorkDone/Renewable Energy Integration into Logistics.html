@@ -100,6 +100,32 @@
     <section class="mb-8">
       <h3 class="text-2xl primary-text font-semibold mb-4">Emission Comparison</h3>
       <canvas id="emissionsChart"></canvas>
+      <p id="comparison" class="text-lg text-gray-700 mt-4"></p>
+    </section>
+
+    <!-- Renewable Energy Data -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Renewable Energy Data</h3>
+      <div id="renewableData" class="bg-white p-4 shadow-md rounded">
+        <h4 class="text-xl font-semibold">Current Energy Availability</h4>
+        <p class="text-gray-600 mt-2">Solar Energy: <span id="solarAvailability">85%</span> available</p>
+        <p class="text-gray-600">Wind Energy: <span id="windAvailability">70%</span> available</p>
+        <p class="text-gray-600">Best time to recharge electric vehicles: <span id="bestRechargeTime">2 PM - 4 PM</span></p>
+      </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">User Feedback on Emissions Predictions</h3>
+      <div class="bg-white p-4 shadow-md rounded">
+        <label for="feedback" class="block text-gray-700">Did the predicted emissions match your actual emissions?</label>
+        <select id="feedback" class="border border-gray-300 p-2 w-full mb-4">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+        <button onclick="submitFeedback()" class="primary-bg text-white p-2 rounded">Submit Feedback</button>
+      </div>
+      <p id="feedbackResult" class="text-lg text-gray-700 mt-4"></p>
     </section>
   </main>
 
@@ -110,6 +136,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // Original emissions for comparison (hard-coded for demonstration purposes)
+    const originalEmissions = {
+      diesel: 0.27,  // kg CO2 per km
+      electric: 0.03, // kg CO2 per km
+      solar: 0.01     // kg CO2 per km
+    };
+
     function calculateEmissions() {
       const distance = parseFloat(document.getElementById('distance').value);
       const vehicle = document.getElementById('vehicle').value;
@@ -117,20 +150,49 @@
       let emissionFactor;
       switch (vehicle) {
         case 'diesel':
-          emissionFactor = 0.27; // kg CO2 per km for diesel truck
+          emissionFactor = originalEmissions.diesel; // kg CO2 per km for diesel truck
           break;
         case 'electric':
-          emissionFactor = 0.03; // kg CO2 per km for electric truck
+          emissionFactor = originalEmissions.electric; // kg CO2 per km for electric truck
           break;
         case 'solar':
-          emissionFactor = 0.01; // kg CO2 per km for solar-powered truck
+          emissionFactor = originalEmissions.solar; // kg CO2 per km for solar-powered truck
           break;
       }
 
-      const emissions = distance * emissionFactor;
-      document.getElementById('result').innerText = `Estimated Emissions: ${emissions.toFixed(2)} kg CO2`;
+      const estimatedEmissions = distance * emissionFactor;
+      document.getElementById('result').innerText = `Estimated Emissions: ${estimatedEmissions.toFixed(2)} kg CO2`;
 
-      updateChart(vehicle, emissions);
+      // Update renewable energy data based on emissions calculation
+      updateRenewableData(estimatedEmissions, vehicle);
+
+      // Update comparison text
+      const originalEmission = distance * emissionFactor; // Using the same emission factor for comparison
+      document.getElementById('comparison').innerText = `Original Emissions: ${originalEmission.toFixed(2)} kg CO2, Estimated Emissions: ${estimatedEmissions.toFixed(2)} kg CO2`;
+
+      updateChart(vehicle, estimatedEmissions);
+    }
+
+    function updateRenewableData(estimatedEmissions, vehicle) {
+      // Dynamic renewable energy data based on emissions
+      let solarAvailability = '85%';
+      let windAvailability = '70%';
+      let bestRechargeTime = '2 PM - 4 PM';
+
+      // Modify renewable data based on estimated emissions
+      if (estimatedEmissions < 10) {
+        solarAvailability = '90%';
+        windAvailability = '75%';
+        bestRechargeTime = '1 PM - 3 PM';
+      } else if (estimatedEmissions < 20) {
+        solarAvailability = '80%';
+        windAvailability = '65%';
+        bestRechargeTime = '3 PM - 5 PM';
+      }
+
+      document.getElementById('solarAvailability').innerText = solarAvailability;
+      document.getElementById('windAvailability').innerText = windAvailability;
+      document.getElementById('bestRechargeTime').innerText = bestRechargeTime;
     }
 
     // Chart.js setup
@@ -168,6 +230,14 @@
 
       emissionsChart.data.datasets[0].data[vehicleIndex[vehicle]] = emissions;
       emissionsChart.update();
+    }
+
+    function submitFeedback() {
+      const feedback = document.getElementById('feedback').value;
+      const feedbackMessage = feedback === 'yes' 
+        ? 'Thank you for your feedback! We strive for accuracy.' 
+        : 'Thank you for your feedback! We will improve our predictions.';
+      document.getElementById('feedbackResult').innerText = feedbackMessage;
     }
   </script>
 </body>
