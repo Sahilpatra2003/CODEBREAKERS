@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renewable Energy Integration into Logistics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary-color: #4f46e5; /* Indigo */
+    }
+    .primary-bg {
+      background-color: var(--primary-color);
+    }
+    .primary-text {
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Header -->
+  <nav class="primary-bg p-4 text-white">
+    <div class="container mx-auto">
+      <h1 class="text-3xl font-bold">Renewable Energy Integration into Logistics</h1>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container mx-auto py-8">
+    <!-- Introduction Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl primary-text font-semibold">Sustainable Logistics through Renewable Energy</h2>
+      <p class="text-gray-700 mt-4">
+        Integrating renewable energy into logistics is key to reducing carbon footprints. This includes using solar-powered vehicles, wind-powered warehouses, and other green energy sources to replace fossil fuels.
+      </p>
+    </section>
+
+    <!-- Blog Posts Section -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Innovative Ideas in Renewable Logistics</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <!-- Blog Post 1 -->
+        <div class="bg-white p-4 shadow-md rounded">
+          <h4 class="text-xl font-semibold">Solar-Powered Delivery Vehicles</h4>
+          <p class="text-gray-600 mt-2">
+            Solar-powered trucks reduce dependency on diesel and cut down CO2 emissions. Learn how these vehicles are revolutionizing logistics.
+          </p>
+          <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
+        </div>
+
+        <!-- Blog Post 2 -->
+        <div class="bg-white p-4 shadow-md rounded">
+          <h4 class="text-xl font-semibold">Wind-Powered Warehouses</h4>
+          <p class="text-gray-600 mt-2">
+            Warehouses powered by wind energy significantly reduce electricity consumption from traditional power grids. Explore how this transition is helping reduce emissions.
+          </p>
+          <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
+        </div>
+
+        <!-- Blog Post 3 -->
+        <div class="bg-white p-4 shadow-md rounded">
+          <h4 class="text-xl font-semibold">Electric Vehicle Fleets</h4>
+          <p class="text-gray-600 mt-2">
+            Electric trucks are replacing conventional ones, drastically reducing greenhouse gases in logistics operations. Discover the benefits and impact.
+          </p>
+          <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Carbon Footprint Calculator -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Carbon Footprint Calculator</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Distance Input -->
+        <div>
+          <label for="distance" class="block text-gray-700">Distance Traveled (km):</label>
+          <input type="number" id="distance" class="border border-gray-300 p-2 w-full mb-4" placeholder="Enter distance in km">
+        </div>
+
+        <!-- Vehicle Type Selection -->
+        <div>
+          <label for="vehicle" class="block text-gray-700">Select Vehicle Type:</label>
+          <select id="vehicle" class="border border-gray-300 p-2 w-full mb-4">
+            <option value="diesel">Diesel Truck</option>
+            <option value="electric">Electric Truck</option>
+            <option value="solar">Solar-Powered Truck</option>
+          </select>
+        </div>
+      </div>
+      <!-- Calculate Button -->
+      <button onclick="calculateEmissions()" class="primary-bg text-white p-2 rounded">Calculate</button>
+
+      <!-- Result -->
+      <p id="result" class="text-lg text-gray-700 mt-4"></p>
+    </section>
+
+    <!-- Emission Comparison Graph -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Emission Comparison</h3>
+      <canvas id="emissionsChart"></canvas>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="primary-bg text-white py-4 text-center">
+    <p>&copy; 2024 Renewable Energy Integration into Logistics</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function calculateEmissions() {
+      const distance = parseFloat(document.getElementById('distance').value);
+      const vehicle = document.getElementById('vehicle').value;
+
+      let emissionFactor;
+      switch (vehicle) {
+        case 'diesel':
+          emissionFactor = 0.27; // kg CO2 per km for diesel truck
+          break;
+        case 'electric':
+          emissionFactor = 0.03; // kg CO2 per km for electric truck
+          break;
+        case 'solar':
+          emissionFactor = 0.01; // kg CO2 per km for solar-powered truck
+          break;
+      }
+
+      const emissions = distance * emissionFactor;
+      document.getElementById('result').innerText = `Estimated Emissions: ${emissions.toFixed(2)} kg CO2`;
+
+      updateChart(vehicle, emissions);
+    }
+
+    // Chart.js setup
+    const ctx = document.getElementById('emissionsChart').getContext('2d');
+    let emissionsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Diesel Truck', 'Electric Truck', 'Solar-Powered Truck'],
+        datasets: [{
+          label: 'CO2 Emissions (kg)',
+          data: [0, 0, 0], // Placeholder data
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(75, 192, 192, 0.6)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function updateChart(vehicle, emissions) {
+      const vehicleIndex = {
+        'diesel': 0,
+        'electric': 1,
+        'solar': 2
+      };
+
+      emissionsChart.data.datasets[0].data[vehicleIndex[vehicle]] = emissions;
+      emissionsChart.update();
+    }
+  </script>
+</body>
+</html>
