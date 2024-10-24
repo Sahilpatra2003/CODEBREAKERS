@@ -21,9 +21,9 @@
 <body class="bg-gray-100 text-gray-900">
 
   <!-- Header -->
-  <nav class="primary-bg p-4 text-white">
+  <nav class="primary-bg p-6 shadow-lg">
     <div class="container mx-auto">
-      <h1 class="text-3xl font-bold">Cross Sector Carbon Optimization</h1>
+      <h1 class="text-3xl font-bold text-center text-white">Cross Sector Carbon Optimization</h1>
     </div>
   </nav>
 
@@ -31,8 +31,8 @@
   <main class="container mx-auto py-8">
     <!-- Section: Introduction -->
     <section class="mb-8">
-      <h2 class="text-2xl primary-text font-semibold">Welcome to the Future of Carbon Reduction</h2>
-      <p class="text-gray-700 mt-4">
+      <h2 class="text-2xl primary-text font-semibold text-center">Welcome to the Future of Carbon Reduction</h2>
+      <p class="text-gray-700 mt-4 text-center">
         Discover innovative methods to calculate and reduce carbon emissions across various sectors. 
         Cross-sector carbon optimization focuses on integrating strategies from multiple industries, 
         creating more efficient systems for carbon management.
@@ -41,10 +41,10 @@
 
     <!-- Section: Blog Posts -->
     <section class="mb-8">
-      <h3 class="text-2xl primary-text font-semibold mb-4">Latest Articles</h3>
-      <div class="grid grid-cols-3 gap-4">
+      <h3 class="text-2xl primary-text font-semibold mb-4 text-center">Latest Articles</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Example blog post -->
-        <div class="bg-white p-4 shadow-md rounded">
+        <div class="bg-white p-4 shadow-lg rounded-lg transition-transform transform hover:scale-105">
           <h4 class="text-xl font-semibold">Optimizing Carbon Emissions in Transportation</h4>
           <p class="text-gray-600 mt-2">
             Learn how the transportation sector is adopting electric vehicles, optimizing routes, 
@@ -53,7 +53,7 @@
           <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
         </div>
 
-        <div class="bg-white p-4 shadow-md rounded">
+        <div class="bg-white p-4 shadow-lg rounded-lg transition-transform transform hover:scale-105">
           <h4 class="text-xl font-semibold">Energy Sector Innovations</h4>
           <p class="text-gray-600 mt-2">
             Explore how renewable energy and carbon capture technologies are transforming the energy sector 
@@ -62,7 +62,7 @@
           <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
         </div>
 
-        <div class="bg-white p-4 shadow-md rounded">
+        <div class="bg-white p-4 shadow-lg rounded-lg transition-transform transform hover:scale-105">
           <h4 class="text-xl font-semibold">Carbon Neutral Manufacturing</h4>
           <p class="text-gray-600 mt-2">
             Discover the manufacturing innovations driving carbon-neutral processes and reducing the industry's 
@@ -75,39 +75,41 @@
 
     <!-- Section: Carbon Footprint Calculator -->
     <section class="mb-8">
-      <h3 class="text-2xl primary-text font-semibold mb-4">Calculate Your Carbon Footprint</h3>
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Distance Input -->
+      <h3 class="text-2xl primary-text font-semibold mb-4 text-center">Calculate Your Carbon Footprint</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Sector Selection -->
         <div>
           <label for="sector" class="block text-gray-700">Choose Sector:</label>
-          <select id="sector" class="border border-gray-300 p-2 w-full mb-4">
+          <select id="sector" class="border border-gray-300 p-2 w-full mb-4 rounded">
             <option value="transportation">Transportation</option>
             <option value="energy">Energy</option>
             <option value="manufacturing">Manufacturing</option>
           </select>
         </div>
-        <!-- Fuel or Energy Usage Input -->
+        <!-- Energy/Fuel Usage Input -->
         <div>
           <label for="usage" class="block text-gray-700">Energy/Fuel Consumption:</label>
-          <input type="number" id="usage" class="border border-gray-300 p-2 w-full mb-4" />
+          <input type="number" id="usage" class="border border-gray-300 p-2 w-full mb-4 rounded" />
         </div>
       </div>
       <!-- Calculate Button -->
-      <button onclick="calculateFootprint()" class="primary-bg text-white p-2 rounded">Calculate</button>
+      <button onclick="calculateFootprint()" class="primary-bg text-white p-2 rounded shadow-lg hover:bg-indigo-700 transition-colors">
+        Calculate
+      </button>
 
       <!-- Results -->
-      <p id="result" class="text-lg text-gray-700 mt-4"></p>
+      <p id="result" class="text-lg text-gray-700 mt-4 text-center"></p>
     </section>
 
     <!-- Section: Graph -->
     <section class="mb-8">
-      <h3 class="text-2xl primary-text font-semibold mb-4">Sector-wise Carbon Emission Comparison</h3>
-      <canvas id="emissionsChart"></canvas>
+      <h3 class="text-2xl primary-text font-semibold mb-4 text-center">Sector-wise Carbon Emission Comparison</h3>
+      <canvas id="emissionsChart" class="bg-white rounded-lg shadow-lg"></canvas>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer class="primary-bg text-white py-4 text-center">
+  <footer class="primary-bg text-white py-4 text-center shadow-lg">
     <p>&copy; 2024 Cross Sector Carbon Optimization</p>
   </footer>
 
@@ -155,7 +157,27 @@
       options: {
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'CO2 Emissions (kg)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Sectors'
+            }
+          }
+        },
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Sector-wise Carbon Emission Comparison'
           }
         }
       }
