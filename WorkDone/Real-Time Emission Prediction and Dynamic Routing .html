@@ -1,175 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Route Optimization & Carbon Footprint Comparison</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --primary-color: #4f46e5; /* Indigo */
-    }
-    .primary-bg {
-      background-color: var(--primary-color);
-    }
-    .primary-text {
-      color: var(--primary-color);
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-gray-100 text-gray-900">
-
-  <!-- Header -->
-  <nav class="primary-bg p-4 text-white">
-    <div class="container mx-auto">
-      <h1 class="text-3xl font-bold">Route Optimization & Carbon Footprint Comparison</h1>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="container mx-auto py-8">
-    <!-- Section: Introduction -->
-    <section class="mb-8">
-      <h2 class="text-2xl primary-text font-semibold">Optimizing Routes to Reduce Carbon Emissions</h2>
-      <p class="text-gray-700 mt-4">
-        Input your travel details to see how optimized routes can reduce your emissions. Compare the emissions between a standard route and the optimized route.
-      </p>
-    </section>
-
-    <!-- Section: Carbon Footprint and Route Optimization -->
-    <section class="mb-8">
-      <h3 class="text-2xl primary-text font-semibold mb-4">Optimize Route & Calculate Emissions</h3>
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Input for Distance -->
-        <div>
-          <label for="distance" class="block text-gray-700">Enter Distance (km):</label>
-          <input type="number" id="distance" class="border border-gray-300 p-2 w-full mb-4" placeholder="Enter the total distance" />
-        </div>
-        <!-- Select Vehicle Type -->
-        <div>
-          <label for="vehicle" class="block text-gray-700">Select Vehicle Type:</label>
-          <select id="vehicle" class="border border-gray-300 p-2 w-full mb-4">
-            <option value="car">Car</option>
-            <option value="truck">Truck</option>
-            <option value="electric">Electric Vehicle</option>
-          </select>
-        </div>
-      </div>
-      <!-- Optimize Button -->
-      <button onclick="optimizeRoute()" class="primary-bg text-white p-2 rounded">Optimize Route</button>
-
-      <!-- Route Optimization Results -->
-      <p id="optimizedResult" class="text-lg text-gray-700 mt-4"></p>
-
-      <!-- Carbon Footprint Calculation Button -->
-      <button onclick="calculateEmissions()" class="primary-bg text-white p-2 rounded mt-4 hidden" id="calculateBtn">Calculate Carbon Footprint</button>
-
-      <!-- Results -->
-      <p id="result" class="text-lg text-gray-700 mt-4"></p>
-    </section>
-
-    <!-- Section: Emission Comparison Graph -->
-    <section class="mb-8">
-      <h3 class="text-2xl primary-text font-semibold mb-4">Emission Comparison for Routes</h3>
-      <canvas id="emissionsChart"></canvas>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="primary-bg text-white py-4 text-center">
-    <p>&copy; 2024 Route Optimization & Carbon Footprint Comparison</p>
-  </footer>
-
-  <script>
-    let optimizedDistance;
-
-    function optimizeRoute() {
-      const distance = parseFloat(document.getElementById('distance').value);
-      const vehicle = document.getElementById('vehicle').value;
-
-      let maxReductionPercentage;
-
-      // Set maximum reduction percentage based on vehicle type
-      switch (vehicle) {
-        case 'car':
-          maxReductionPercentage = 5; // Up to 5% for cars
-          break;
-        case 'truck':
-          maxReductionPercentage = 3; // Up to 3% for trucks
-          break;
-        case 'electric':
-          maxReductionPercentage = 7; // Up to 7% for electric vehicles
-          break;
-      }
-
-      // Simulate dynamic route optimization with random reductions based on max limit
-      const reductionPercentage = Math.random() * maxReductionPercentage; // Random percentage based on vehicle type
-      const reductionFactor = 1 - (reductionPercentage / 100);
-      optimizedDistance = distance * reductionFactor; // Reduce the distance by this factor
-
-      document.getElementById('optimizedResult').innerText = `Optimized Route Distance: ${optimizedDistance.toFixed(2)} km (${reductionPercentage.toFixed(2)}% shorter)`;
-
-      // Show the calculate emissions button after optimization
-      document.getElementById('calculateBtn').classList.remove('hidden');
-    }
-
-    function calculateEmissions() {
-      const vehicle = document.getElementById('vehicle').value;
-
-      let emissionFactor;
-      switch (vehicle) {
-        case 'car':
-          emissionFactor = 0.12; // kg CO2 per km for car
-          break;
-        case 'truck':
-          emissionFactor = 0.27; // kg CO2 per km for truck
-          break;
-        case 'electric':
-          emissionFactor = 0.03; // kg CO2 per km for electric vehicle
-          break;
-      }
-
-      // Calculate emissions for both standard and optimized routes
-      const distance = parseFloat(document.getElementById('distance').value);
-      const standardEmissions = distance * emissionFactor;
-      const optimizedEmissions = optimizedDistance * emissionFactor;
-
-      document.getElementById('result').innerText = `Standard Route Emissions: ${standardEmissions.toFixed(2)} kg CO2 | Optimized Route Emissions: ${optimizedEmissions.toFixed(2)} kg CO2`;
-
-      // Update the chart
-      updateChart(standardEmissions, optimizedEmissions);
-    }
-
-    // Chart.js setup for emissions comparison
-    const ctx = document.getElementById('emissionsChart').getContext('2d');
-    let emissionsChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Standard Route', 'Optimized Route'],
-        datasets: [{
-          label: 'CO2 Emissions (kg)',
-          data: [0, 0], // Initial data, updated by JS
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.6)', // Standard Route
-            'rgba(54, 162, 235, 0.6)'  // Optimized Route
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Route Optimization & Carbon Footprint Comparison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-color: #4f46e5; /* Indigo */
+            --secondary-color: #6366f1; /* Lighter Indigo */
+            --hover-color: #3b82f6; /* Blue for hover animations */
         }
-      }
-    });
 
-    function updateChart(standardEmissions, optimizedEmissions) {
-      emissionsChart.data.datasets[0].data = [standardEmissions, optimizedEmissions];
-      emissionsChart.update();
-    }
-  </script>
+        .primary-bg {
+            background-color: var(--primary-color);
+        }
+        .primary-text {
+            color: var(--primary-color);
+        }
+        .secondary-bg {
+            background-color: var(--secondary-color);
+        }
+        .hover-animate {
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+        }
+        .hover-animate:hover {
+            transform: scale(1.05);
+            background-color: var(--hover-color);
+        }
+        .text-pop-up {
+            position: relative;
+            animation: textPopUp 1s ease-out;
+        }
+        @keyframes textPopUp {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+        }
+        .scroll-animate.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in {
+            animation: fadeIn 1.5s ease-in;
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 fade-in">
+    <!-- Header -->
+    <nav class="primary-bg p-6 text-white hover-animate">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl font-bold text-pop-up">Route Optimization & Carbon Footprint Comparison</h1>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-12">
+        <!-- Section: Introduction -->
+        <section class="mb-12 scroll-animate">
+            <h2 class="text-3xl primary-text font-semibold text-pop-up">Optimizing Routes to Reduce Carbon Emissions</h2>
+            <p class="text-gray-700 mt-6 text-lg">
+                Input your source and destination to see how optimized routes can reduce your emissions. Compare the emissions between a standard route and the optimized route.
+            </p>
+        </section>
+
+        <!-- Section: Optimize Route & Calculate Emissions -->
+        <section class="mb-12 scroll-animate">
+            <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Optimize Route & Calculate Emissions</h3>
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Input for Source -->
+                <div>
+                    <label for="source" class="block text-lg text-gray-700">Enter Source Location:</label>
+                    <input type="text" id="source" class="border border-gray-300 p-3 w-full mb-6 rounded-md" placeholder="Enter source" />
+                </div>
+                <!-- Input for Destination -->
+                <div>
+                    <label for="destination" class="block text-lg text-gray-700">Enter Destination Location:</label>
+                    <input type="text" id="destination" class="border border-gray-300 p-3 w-full mb-6 rounded-md" placeholder="Enter destination" />
+                </div>
+            </div>
+            <div>
+                <label for="vehicle" class="block text-lg text-gray-700">Select Vehicle Type:</label>
+                <select id="vehicle" class="border border-gray-300 p-3 w-full mb-6 rounded-md">
+                    <option value="car">Car</option>
+                    <option value="truck">Truck</option>
+                    <option value="electric">Electric Vehicle</option>
+                </select>
+            </div>
+
+            <!-- Optimize Button -->
+            <button onclick="optimizeRoute()" class="primary-bg text-white p-3 rounded hover-animate">
+                Optimize Route
+            </button>
+
+            <!-- Route Optimization Results -->
+            <p id="optimizedResult" class="text-xl text-gray-700 mt-6"></p>
+
+            <!-- Carbon Footprint Calculation Button -->
+            <button onclick="calculateEmissions()" class="primary-bg text-white p-3 rounded hover-animate mt-6 hidden" id="calculateBtn">
+                Calculate Carbon Footprint
+            </button>
+
+            <!-- Results -->
+            <p id="result" class="text-xl text-gray-700 mt-6"></p>
+        </section>
+
+        <!-- Section: Emission Comparison Graph -->
+        <section class="mb-12 scroll-animate">
+            <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Emission Comparison for Routes</h3>
+            <div class="p-6 bg-white shadow-lg rounded-md">
+                <canvas id="emissionsChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="primary-bg text-white py-6 text-center hover-animate">
+        <p>&copy; 2024 Route Optimization & Carbon Footprint Comparison</p>
+    </footer>
+
+    <script>
+        let optimizedDistance;
+        let distance;
+
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.scroll-animate').forEach(element => {
+                const position = element.getBoundingClientRect().top;
+                if (position < window.innerHeight - 100) {
+                    element.classList.add('show');
+                }
+            });
+        });
+
+        function getRandomDistance() {
+            return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+        }
+
+        function optimizeRoute() {
+            const source = document.getElementById("source").value;
+            const destination = document.getElementById("destination").value;
+
+            if (!source || !destination) {
+                alert("Please enter both source and destination.");
+                return;
+            }
+
+            distance = getRandomDistance();
+            const vehicle = document.getElementById("vehicle").value || "car";
+
+            let maxReductionPercentage;
+
+            switch (vehicle) {
+                case "car":
+                    maxReductionPercentage = 15;
+                    break;
+                case "truck":
+                    maxReductionPercentage = 10;
+                    break;
+                case "electric":
+                    maxReductionPercentage = 20;
+                    break;
+            }
+
+            const reductionPercentage = Math.random() * maxReductionPercentage;
+            const reductionFactor = 1 - reductionPercentage / 100;
+            optimizedDistance = distance * reductionFactor;
+
+            document.getElementById("optimizedResult").innerText = `Route Distance from ${source} to ${destination}: ${distance} km \nOptimized Route Distance: ${optimizedDistance.toFixed(2)} km (${reductionPercentage.toFixed(2)}% shorter)`;
+
+            document.getElementById("calculateBtn").classList.remove("hidden");
+        }
+
+        function calculateEmissions() {
+            const vehicle = document.getElementById("vehicle").value || "car";
+
+            let emissionFactor;
+            switch (vehicle) {
+                case "car":
+                    emissionFactor = 0.12;
+                    break;
+                case "truck":
+                    emissionFactor = 0.27;
+                    break;
+                case "electric":
+                    emissionFactor = 0.03;
+                    break;
+            }
+
+            const standardEmissions = distance * emissionFactor;
+            const optimizedEmissions = optimizedDistance * emissionFactor;
+
+            document.getElementById("result").innerText = `Standard Route Emissions: ${standardEmissions.toFixed(2)} kg CO2 | Optimized Route Emissions: ${optimizedEmissions.toFixed(2)} kg CO2`;
+
+            updateChart(standardEmissions, optimizedEmissions);
+        }
+
+        const ctx = document.getElementById("emissionsChart").getContext("2d");
+        let emissionsChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Standard Route", "Optimized Route"],
+                datasets: [
+                    {
+                        label: "CO2 Emissions (kg)",
+                        data: [0, 0],
+                        backgroundColor: [
+                            "rgba(255, 99, 132, 0.6)",
+                            "rgba(54, 162, 235, 0.6)",
+                        ],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
+        function updateChart(standardEmissions, optimizedEmissions) {
+            emissionsChart.data.datasets[0].data = [standardEmissions, optimizedEmissions];
+            emissionsChart.update();
+        }
+    </script>
 </body>
 </html>
