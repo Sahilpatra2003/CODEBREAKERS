@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco-Packaging Optimization Using AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary-color: #4f46e5; /* Indigo */
+    }
+    .primary-bg {
+      background-color: var(--primary-color);
+    }
+    .primary-text {
+      color: var(--primary-color);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Header -->
+  <nav class="primary-bg p-4 text-white">
+    <div class="container mx-auto">
+      <h1 class="text-3xl font-bold">Eco-Packaging Optimization Using AI</h1>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container mx-auto py-8">
+    <!-- Section: Introduction -->
+    <section class="mb-8">
+      <h2 class="text-2xl primary-text font-semibold">Optimize Packaging with AI for a Greener Future</h2>
+      <p class="text-gray-700 mt-4">
+        Learn how artificial intelligence is revolutionizing the packaging industry by optimizing materials, reducing waste, 
+        and minimizing the carbon footprint of products. Our goal is to make packaging sustainable, efficient, and eco-friendly.
+      </p>
+    </section>
+
+    <!-- Section: Blog Posts -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Latest Articles</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <!-- Example blog post -->
+        <div class="bg-white p-4 shadow-md rounded">
+          <h4 class="text-xl font-semibold">AI-Powered Packaging Design: Reducing Waste</h4>
+          <p class="text-gray-600 mt-2">
+            Discover how AI is helping companies design packaging that uses less material without compromising quality, 
+            leading to significant reductions in carbon emissions.
+          </p>
+          <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
+        </div>
+
+        <div class="bg-white p-4 shadow-md rounded">
+          <h4 class="text-xl font-semibold">Biodegradable Packaging: A Game Changer</h4>
+          <p class="text-gray-600 mt-2">
+            Explore the latest innovations in biodegradable packaging and how AI is used to select the most sustainable 
+            materials for different products.
+          </p>
+          <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
+        </div>
+
+        <div class="bg-white p-4 shadow-md rounded">
+          <h4 class="text-xl font-semibold">Circular Economy: Reusing and Recycling Packaging</h4>
+          <p class="text-gray-600 mt-2">
+            Learn about AI-powered solutions that help companies track and reuse packaging, promoting a circular economy and 
+            further reducing emissions.
+          </p>
+          <a href="#" class="text-indigo-600 hover:text-indigo-800 mt-4 block">Read More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Carbon Footprint Calculator -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Calculate the Carbon Footprint of Your Packaging</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Packaging Material Input -->
+        <div>
+          <label for="material" class="block text-gray-700">Select Packaging Material:</label>
+          <select id="material" class="border border-gray-300 p-2 w-full mb-4">
+            <option value="plastic">Plastic</option>
+            <option value="paper">Paper</option>
+            <option value="biodegradable">Biodegradable</option>
+          </select>
+        </div>
+        <!-- Weight or Volume Input -->
+        <div>
+          <label for="amount" class="block text-gray-700">Amount of Packaging (kg):</label>
+          <input type="number" id="amount" class="border border-gray-300 p-2 w-full mb-4" />
+        </div>
+      </div>
+      <!-- Calculate Button -->
+      <button onclick="calculateFootprint()" class="primary-bg text-white p-2 rounded">Calculate</button>
+
+      <!-- Results -->
+      <p id="result" class="text-lg text-gray-700 mt-4"></p>
+    </section>
+
+    <!-- Section: Graph -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Packaging Material Emission Comparison</h3>
+      <canvas id="emissionsChart"></canvas>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="primary-bg text-white py-4 text-center">
+    <p>&copy; 2024 Eco-Packaging Optimization Using AI</p>
+  </footer>
+
+  <script>
+    function calculateFootprint() {
+      const material = document.getElementById('material').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      
+      let emissionFactor;
+      switch (material) {
+        case 'plastic':
+          emissionFactor = 6.0; // kg CO2 per kg of plastic
+          break;
+        case 'paper':
+          emissionFactor = 1.5; // kg CO2 per kg of paper
+          break;
+        case 'biodegradable':
+          emissionFactor = 0.9; // kg CO2 per kg of biodegradable material
+          break;
+      }
+
+      const emissions = amount * emissionFactor;
+      document.getElementById('result').innerText = `Estimated Emissions: ${emissions.toFixed(2)} kg CO2`;
+
+      updateChart(material, emissions);
+    }
+
+    // Chart.js setup for emissions comparison
+    const ctx = document.getElementById('emissionsChart').getContext('2d');
+    let emissionsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Plastic', 'Paper', 'Biodegradable'],
+        datasets: [{
+          label: 'CO2 Emissions (kg)',
+          data: [0, 0, 0], // Initial data, updated by JS
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(75, 192, 192, 0.6)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function updateChart(material, emissions) {
+      const materialIndex = {
+        'plastic': 0,
+        'paper': 1,
+        'biodegradable': 2
+      };
+
+      emissionsChart.data.datasets[0].data[materialIndex[material]] = emissions;
+      emissionsChart.update();
+    }
+  </script>
+</body>
+</html>
