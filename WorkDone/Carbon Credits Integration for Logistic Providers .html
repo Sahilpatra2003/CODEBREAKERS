@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carbon Credit Integration for Logistics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary-color: #4f46e5; /* Indigo */
+    }
+    .primary-bg {
+      background-color: var(--primary-color);
+    }
+    .primary-text {
+      color: var(--primary-color);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Header -->
+  <nav class="primary-bg p-4 text-white">
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold">Carbon Credit Integration for Logistics</h1>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container mx-auto py-8">
+    <!-- Input Form -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Calculate Your Carbon Footprint</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Distance Input -->
+        <div>
+          <label for="distance" class="block text-gray-700">Distance Traveled (km):</label>
+          <input type="number" id="distance" class="border border-gray-300 p-2 w-full mb-4" />
+        </div>
+        <!-- Fuel Consumption Input -->
+        <div>
+          <label for="fuel" class="block text-gray-700">Fuel Consumption per 100 km (liters):</label>
+          <input type="number" id="fuel" class="border border-gray-300 p-2 w-full mb-4" />
+        </div>
+      </div>
+
+      <!-- Checkbox for Carbon Credit Offset -->
+      <div class="mb-4">
+        <label class="block text-gray-700">
+          <input type="checkbox" id="useCarbonCredits" /> Apply Carbon Credit Offset
+        </label>
+      </div>
+
+      <!-- Calculate Button -->
+      <button onclick="calculateFootprint()" class="primary-bg text-white p-2 rounded">Calculate</button>
+
+      <!-- Results -->
+      <p id="result" class="text-lg text-gray-700 mt-4"></p>
+    </section>
+
+    <!-- Graph Section -->
+    <section class="mb-8">
+      <h3 class="text-2xl primary-text font-semibold mb-4">Comparison of Emissions</h3>
+      <canvas id="emissionsChart"></canvas>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="primary-bg text-white py-4 text-center">
+    <p>&copy; 2024 Carbon Credit Integration for Logistics</p>
+  </footer>
+
+  <script>
+    // Carbon footprint calculation
+    function calculateFootprint() {
+      const distance = parseFloat(document.getElementById('distance').value);
+      const fuelPer100Km = parseFloat(document.getElementById('fuel').value);
+      const useCarbonCredits = document.getElementById('useCarbonCredits').checked;
+
+      // Calculate total fuel consumption based on distance
+      const totalFuelConsumed = (fuelPer100Km / 100) * distance;
+
+      // Traditional Method: Calculate emissions
+      const emissionPerLiter = 2.31; // kg CO2 per liter of fuel
+      const traditionalEmissions = totalFuelConsumed * emissionPerLiter;
+
+      // Carbon Credit Integration Method: Reduced emissions using credits (example reduction 20%)
+      let carbonCreditEmissions = traditionalEmissions * 0.8; // 20% emission reduction using strategies like EVs, carbon offsets
+
+      // Show Results
+      let resultText = `Traditional Carbon Footprint: ${traditionalEmissions.toFixed(2)} kg CO2 for ${distance} km. `;
+      if (useCarbonCredits) {
+        resultText += `With Carbon Credit Integration: ${carbonCreditEmissions.toFixed(2)} kg CO2.`;
+      }
+      document.getElementById('result').innerText = resultText;
+
+      // Update Chart
+      updateChart(traditionalEmissions, useCarbonCredits ? carbonCreditEmissions : traditionalEmissions);
+    }
+
+    // Chart.js setup for emissions comparison
+    const ctx = document.getElementById('emissionsChart').getContext('2d');
+    let emissionsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Traditional', 'With Carbon Credits'],
+        datasets: [{
+          label: 'CO2 Emissions (kg)',
+          data: [0, 0], // Initial data, updated by JS
+          backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Function to update chart data
+    function updateChart(traditionalEmissions, carbonCreditEmissions) {
+      emissionsChart.data.datasets[0].data = [traditionalEmissions, carbonCreditEmissions];
+      emissionsChart.update();
+    }
+  </script>
+</body>
+</html>
