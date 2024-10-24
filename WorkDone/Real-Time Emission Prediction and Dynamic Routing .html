@@ -28,6 +28,15 @@
             transform: scale(1.05);
             background-color: var(--hover-color);
         }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
         .text-pop-up {
             position: relative;
             animation: textPopUp 1s ease-out;
@@ -73,64 +82,92 @@
         </div>
     </nav>
 
+    <!-- Hero Section with Image -->
+    <section class="container mx-auto py-12">
+        <div class="relative h-72 bg-gray-200 rounded-lg shadow-lg mb-8">
+            <img src="https://via.placeholder.com/1200x400?text=Route+Optimization+Image" alt="Hero Image" class="object-cover w-full h-full rounded-lg">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <h2 class="text-4xl text-white font-bold bg-black bg-opacity-50 p-4 rounded-md">Reduce Emissions with Optimized Routes</h2>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
     <main class="container mx-auto py-12">
         <!-- Section: Introduction -->
         <section class="mb-12 scroll-animate">
-            <h2 class="text-3xl primary-text font-semibold text-pop-up">Optimizing Routes to Reduce Carbon Emissions</h2>
-            <p class="text-gray-700 mt-6 text-lg">
-                Input your source and destination to see how optimized routes can reduce your emissions. Compare the emissions between a standard route and the optimized route.
-            </p>
+            <div class="card">
+                <h2 class="text-3xl primary-text font-semibold text-pop-up">Optimizing Routes to Reduce Carbon Emissions</h2>
+                <p class="text-gray-700 mt-6 text-lg">
+                    Input your source and destination to see how optimized routes can reduce your emissions. Compare the emissions between a standard route and the optimized route.
+                </p>
+            </div>
         </section>
 
         <!-- Section: Optimize Route & Calculate Emissions -->
         <section class="mb-12 scroll-animate">
-            <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Optimize Route & Calculate Emissions</h3>
-            <div class="grid grid-cols-2 gap-8">
-                <!-- Input for Source -->
-                <div>
-                    <label for="source" class="block text-lg text-gray-700">Enter Source Location:</label>
-                    <input type="text" id="source" class="border border-gray-300 p-3 w-full mb-6 rounded-md" placeholder="Enter source" />
+            <div class="card">
+                <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Optimize Route & Calculate Emissions</h3>
+                <div class="grid grid-cols-2 gap-8">
+                    <!-- Input for Source -->
+                    <div>
+                        <label for="source" class="block text-lg text-gray-700">Enter Source Location:</label>
+                        <input type="text" id="source" class="border border-gray-300 p-3 w-full mb-6 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-400" placeholder="Enter source" />
+                    </div>
+                    <!-- Input for Destination -->
+                    <div>
+                        <label for="destination" class="block text-lg text-gray-700">Enter Destination Location:</label>
+                        <input type="text" id="destination" class="border border-gray-300 p-3 w-full mb-6 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-400" placeholder="Enter destination" />
+                    </div>
                 </div>
-                <!-- Input for Destination -->
                 <div>
-                    <label for="destination" class="block text-lg text-gray-700">Enter Destination Location:</label>
-                    <input type="text" id="destination" class="border border-gray-300 p-3 w-full mb-6 rounded-md" placeholder="Enter destination" />
+                    <label for="vehicle" class="block text-lg text-gray-700">Select Vehicle Type:</label>
+                    <select id="vehicle" class="border border-gray-300 p-3 w-full mb-6 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-400">
+                        <option value="car">Car</option>
+                        <option value="truck">Truck</option>
+                        <option value="electric">Electric Vehicle</option>
+                    </select>
+                </div>
+
+                <!-- Optimize Button -->
+                <button onclick="optimizeRoute()" class="primary-bg text-white p-3 rounded hover-animate shadow-md">
+                    Optimize Route
+                </button>
+
+                <!-- Route Optimization Results -->
+                <p id="optimizedResult" class="text-xl text-gray-700 mt-6"></p>
+
+                <!-- Carbon Footprint Calculation Button -->
+                <button onclick="calculateEmissions()" class="primary-bg text-white p-3 rounded hover-animate mt-6 hidden shadow-md" id="calculateBtn">
+                    Calculate Carbon Footprint
+                </button>
+
+                <!-- Results -->
+                <p id="result" class="text-xl text-gray-700 mt-6"></p>
+            </div>
+        </section>
+
+        <!-- Section: Image Holder for Visualization (Initially Hidden) -->
+        <section id="visualizationSection" class="mb-12 scroll-animate hidden">
+            <div class="card">
+                <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Visualization of Optimized Routes</h3>
+                <div class="relative h-48 bg-gray-200 rounded-lg shadow-lg">
+                    <img src="https://via.placeholder.com/1200x300?text=Map+Image" alt="Map Image" class="object-cover w-full h-full rounded-lg">
                 </div>
             </div>
-            <div>
-                <label for="vehicle" class="block text-lg text-gray-700">Select Vehicle Type:</label>
-                <select id="vehicle" class="border border-gray-300 p-3 w-full mb-6 rounded-md">
-                    <option value="car">Car</option>
-                    <option value="truck">Truck</option>
-                    <option value="electric">Electric Vehicle</option>
-                </select>
-            </div>
-
-            <!-- Optimize Button -->
-            <button onclick="optimizeRoute()" class="primary-bg text-white p-3 rounded hover-animate">
-                Optimize Route
-            </button>
-
-            <!-- Route Optimization Results -->
-            <p id="optimizedResult" class="text-xl text-gray-700 mt-6"></p>
-
-            <!-- Carbon Footprint Calculation Button -->
-            <button onclick="calculateEmissions()" class="primary-bg text-white p-3 rounded hover-animate mt-6 hidden" id="calculateBtn">
-                Calculate Carbon Footprint
-            </button>
-
-            <!-- Results -->
-            <p id="result" class="text-xl text-gray-700 mt-6"></p>
         </section>
 
         <!-- Section: Emission Comparison Graph -->
         <section class="mb-12 scroll-animate">
-            <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Emission Comparison for Routes</h3>
-            <div class="p-6 bg-white shadow-lg rounded-md">
-                <canvas id="emissionsChart"></canvas>
+            <div class="card">
+                <h3 class="text-3xl primary-text font-semibold mb-6 text-pop-up">Emission Comparison for Routes</h3>
+                <div class="p-6 bg-white shadow-lg rounded-md">
+                    <canvas id="emissionsChart"></canvas>
+                </div>
             </div>
         </section>
+
+        
     </main>
 
     <!-- Footer -->
@@ -188,6 +225,7 @@
             document.getElementById("optimizedResult").innerText = `Route Distance from ${source} to ${destination}: ${distance} km \nOptimized Route Distance: ${optimizedDistance.toFixed(2)} km (${reductionPercentage.toFixed(2)}% shorter)`;
 
             document.getElementById("calculateBtn").classList.remove("hidden");
+            document.getElementById("visualizationSection").classList.remove("hidden"); // Show the visualization section
         }
 
         function calculateEmissions() {
